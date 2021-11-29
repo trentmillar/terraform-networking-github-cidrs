@@ -4,6 +4,8 @@ Rolls-up large lists of CIDR ranges into a smaller list of Class B CIDR ranges. 
 
 For now this module only works with the GitHub Meta API's CIDRs for various features like; Actions, Dependabot, Git, Packages, etc. See the raw API, https://api.github.com/meta.
 
+__Important, if a range is rolled-up to fit the `cidr_count_limit` understand that IP addresses not intended will be included in the output__
+
 __only IPv4's are included since many Azure networking rules only accept these__
 
 ## Usage
