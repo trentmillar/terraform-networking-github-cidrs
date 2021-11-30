@@ -61,15 +61,15 @@ locals {
     for cidr in local.github_cidrs : cidr if regex("(^(\\d{1,3}|\\.){3})", cidr)[0] == k
   ] }
 
-  # if the offset is <=0 then we have room in the Stg.Act. FW to fit all the class B's  
+  # if the offset is <=0 then we have room in the CIDR limit to fit all the class B's  
   offset = length(local.class_Bs) - var.cidr_count_limit
 
-  # find the class B's that can roll up to a class A to fit into the FW
+  # find the class B's that can roll up to a class A to fit into the limit
   drops = local.offset >= 0 ? [for k, v in {
     for e in [for e in keys(local.class_Bs) : e] : regex("^\\d{1,3}", e) => regex("^\\d{1,3}", e)...
   } : k if length(v) > local.offset] : []
 
-  # create the cidrs that will fit into the FW's allowed IPs
+  # create the cidrs that will fit into the limit allowed IPs
   cidrs = length(local.drops) == 0 ? {
     for k, v in local.class_Bs : format("%s.0.0/16", k) => 1
     } : (
